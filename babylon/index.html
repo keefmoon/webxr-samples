@@ -25,6 +25,23 @@
     <canvas id="renderCanvas" touch-action="none"></canvas> <!-- touch-action="none" for best results from PEP -->
     <script>
 
+        const axisKeyBox = function (boxLabel, scene) {
+
+            const box = BABYLON.MeshBuilder.CreateBox(boxLabel, {height: 0.1, width: 0.1, depth: 0.1});
+
+            //Create dynamic texture
+            var texture = new BABYLON.DynamicTexture("dynamic texture", {width:256, height:256}, scene);   
+            var material = new BABYLON.StandardMaterial("material", scene);    				
+            material.diffuseTexture = texture;
+            box.material = material;
+            
+            //Add text to dynamic texture
+            var font = "bold 300px Arial";
+            texture.drawText(boxLabel, 50, 250, font, "green", "white", true, true);
+
+            return box;
+        }
+
         const createScene = function () {
             
             const scene = new BABYLON.Scene(engine);
@@ -33,10 +50,14 @@
             camera.attachControl(canvas, true);
             const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0));
 
-            const origin = BABYLON.MeshBuilder.CreateBox("origin", {height: 0.1, width: 0.1, depth: 0.1});
-
-            const yAxis = BABYLON.MeshBuilder.CreateBox("yAxis", {height: 0.1, width: 0.1, depth: 0.1});
-            yAxis.position.y = 1;
+            // Axis Helper
+            const originBox = axisKeyBox("O", scene);
+            const xAxisBox = axisKeyBox("X", scene);
+            xAxisBox.position.x = 1;
+            const yAxisBox = axisKeyBox("Y", scene);
+            yAxisBox.position.y = 1;
+            const zAxisBox = axisKeyBox("Z", scene);
+            zAxisBox.position.z = 1;
 
             const thumbnailBox1 = BABYLON.MeshBuilder.CreateBox("thumbnailBox1", {height: 1, width: 1, depth: 0.05});
             thumbnailBox1.position.y = 2;
